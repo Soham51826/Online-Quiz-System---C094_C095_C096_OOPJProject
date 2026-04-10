@@ -1,5 +1,5 @@
 General|What is the capital of France?|Paris|London|Berlin|Madrid|0
-General|Which planet is known as the Red Planet?|Mars|Venus|Jupiter|Saturn|0
 General|Who wrote 'Romeo and Juliet'?|William Shakespeare|Jane Austen|Charles Dickens|Mark Twain|0
 General|What is the largest mammal on Earth?|Blue Whale|Elephant|Giraffe|Hippopotamus|0
 General|What is the chemical symbol for gold?|Au|Ag|Fe|Cu|0
+Mathematics|what is 2+2|3|2|4|7|2
