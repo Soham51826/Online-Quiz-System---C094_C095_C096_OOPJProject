@@ -42,12 +42,21 @@ public class Question {
      * Factory method to create a Question object from a formatted string.
      */
     public static Question fromString(String line) {
+        if (line == null || line.trim().isEmpty()) return null;
         String[] parts = line.split("\\|");
-        if (parts.length < 7) return null; // Updated for category
-        String cat = parts[0];
-        String text = parts[1];
-        String[] opts = Arrays.copyOfRange(parts, 2, 6);
-        int correctIndex = Integer.parseInt(parts[6]);
-        return new Question(cat, text, opts, correctIndex);
+        if (parts.length < 7) return null; 
+        
+        try {
+            String cat = parts[0].trim();
+            String text = parts[1].trim();
+            String[] opts = new String[4];
+            for (int i = 0; i < 4; i++) {
+                opts[i] = parts[i + 2].trim();
+            }
+            int correctIndex = Integer.parseInt(parts[6].trim());
+            return new Question(cat, text, opts, correctIndex);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

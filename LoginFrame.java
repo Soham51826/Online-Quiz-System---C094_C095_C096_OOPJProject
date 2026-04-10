@@ -10,35 +10,48 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("Quiz System - Login");
-        setSize(400, 200);
+        setSize(450, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
 
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel welcomeLabel = new JLabel("Welcome to Advanced Quiz System");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        welcomeLabel.setForeground(new Color(33, 37, 41));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        add(welcomeLabel, gbc);
+        mainPanel.add(welcomeLabel, gbc);
 
         JLabel userLabel = new JLabel("Enter Username:");
+        userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        add(userLabel, gbc);
+        mainPanel.add(userLabel, gbc);
 
         usernameField = new JTextField(15);
+        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         gbc.gridx = 1;
-        add(usernameField, gbc);
+        mainPanel.add(usernameField, gbc);
 
         loginButton = new JButton("Login");
+        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        loginButton.setBackground(new Color(0, 123, 255));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        add(loginButton, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(loginButton, gbc);
+
+        add(mainPanel, BorderLayout.CENTER);
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
@@ -50,5 +63,8 @@ public class LoginFrame extends JFrame {
                 this.dispose();
             }
         });
+        
+        // Allow hitting Enter to login
+        getRootPane().setDefaultButton(loginButton);
     }
 }

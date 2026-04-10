@@ -8,6 +8,7 @@ public class QuizService {
     private int currentQuestionIndex;
     private int score;
     private User currentUser;
+    private List<Integer> userAnswers;
 
     public QuizService(User user, List<Question> questions) {
         this.currentUser = user;
@@ -15,6 +16,7 @@ public class QuizService {
         Collections.shuffle(this.questions); // Shuffle questions
         this.currentQuestionIndex = 0;
         this.score = 0;
+        this.userAnswers = new ArrayList<>();
     }
 
     public boolean hasMoreQuestions() {
@@ -29,6 +31,7 @@ public class QuizService {
     }
 
     public void submitAnswer(int selectedIndex, int correctIndex) {
+        userAnswers.add(selectedIndex);
         if (selectedIndex == correctIndex) {
             score++;
         }
@@ -53,5 +56,13 @@ public class QuizService {
     
     public int getCurrentIndex() {
         return currentQuestionIndex;
+    }
+
+    public List<Question> getAskedQuestions() {
+        return questions;
+    }
+
+    public List<Integer> getUserAnswers() {
+        return userAnswers;
     }
 }

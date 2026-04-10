@@ -64,6 +64,10 @@ public class CreateQuizFrame extends JFrame {
                 throw new QuizException("All fields are mandatory!");
             }
 
+            if (cat.contains("|") || q.contains("|") || o1.contains("|") || o2.contains("|") || o3.contains("|") || o4.contains("|")) {
+                throw new QuizException("Fields cannot contain the '|' character.");
+            }
+
             int cIdx = Integer.parseInt(cStr) - 1; // 0-indexed
             if (cIdx < 0 || cIdx > 3) {
                 throw new QuizException("Correct option must be between 1 and 4.");

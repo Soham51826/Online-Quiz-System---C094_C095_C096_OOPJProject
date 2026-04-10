@@ -38,7 +38,7 @@ public class MenuFrame extends JFrame {
                 categoryBox.addItem(cat);
             }
         } catch (IOException e) {
-            // Silently fail or log
+            JOptionPane.showMessageDialog(this, "Could not load categories: " + e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
         }
         gbc.gridx = 1;
         add(categoryBox, gbc);
@@ -71,12 +71,17 @@ public class MenuFrame extends JFrame {
             this.dispose();
         });
         adminBtn.addActionListener(e -> {
-            String pass = JOptionPane.showInputDialog(this, "Enter Admin Password:", "Admin Access", JOptionPane.QUESTION_MESSAGE);
-            if ("admin123".equals(pass)) {
-                new AdminFrame(currentUser).setVisible(true);
-                this.dispose();
-            } else if (pass != null) {
-                JOptionPane.showMessageDialog(this, "Incorrect Password!", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            JPasswordField pf = new JPasswordField();
+            int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter Admin Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (okCxl == JOptionPane.OK_OPTION) {
+                String pass = new String(pf.getPassword());
+                if ("admin123".equals(pass)) {
+                    new AdminFrame(currentUser).setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Incorrect Password!", "Access Denied", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         exitBtn.addActionListener(e -> System.exit(0));
