@@ -65,4 +65,28 @@ public class FileManager {
         scores.sort((a, b) -> Integer.compare(Integer.parseInt(b[1]), Integer.parseInt(a[1])));
         return scores;
     }
+
+    /**
+     * Overwrites the questions file with a given list of questions.
+     */
+    public static void overwriteQuestions(List<Question> questions) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(QUESTIONS_FILE))) {
+            for (Question q : questions) {
+                bw.write(q.toString());
+                bw.newLine();
+            }
+        }
+    }
+
+    /**
+     * Loads all unique categories from the questions file.
+     */
+    public static Set<String> getCategories() throws IOException {
+        Set<String> categories = new TreeSet<>();
+        List<Question> questions = loadQuestions();
+        for (Question q : questions) {
+            categories.add(q.getCategory());
+        }
+        return categories;
+    }
 }
