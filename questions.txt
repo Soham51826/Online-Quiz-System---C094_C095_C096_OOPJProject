@@ -1,2 +1,3 @@
 what is 2 + 2|3|6|8|4|3
 what is the capital of India|New Delhi|Uttar Pradesh|Mumbai|Maharahstra|0
+what is 20+20|50|60|25|40|3
