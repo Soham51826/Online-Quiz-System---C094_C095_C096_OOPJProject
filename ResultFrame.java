@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ResultFrame extends JFrame {
             public boolean isCellEditable(int row, int column) { return false; }
         };
         JTable table = new JTable(model);
-        table.setRowHeight(30);
+        table.setRowHeight(40); // Increased height for HTML text
         table.setFont(new Font("Arial", Font.PLAIN, 14));
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         
@@ -55,8 +56,35 @@ public class ResultFrame extends JFrame {
             int userAnsIdx = answers.get(i);
             String userAnsStr = (userAnsIdx >= 0 && userAnsIdx < 4) ? q.getOptions()[userAnsIdx] : "Timeout/None";
             String correctAnsStr = q.getOptions()[q.getCorrectOptionIndex()];
-            model.addRow(new Object[]{"<html>" + q.getQuestionText() + "</html>", userAnsStr, correctAnsStr});
+            model.addRow(new Object[]{"<html><body style='width: 300px;'>" + q.getQuestionText() + "</body></html>", userAnsStr, correctAnsStr});
         }
+
+        // Custom renderer for color coding
+        table.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                int userAnsIdx = answers.get(row);
+                int correctAnsIdx = questions.get(row).getCorrectOptionIndex();
+                
+                if (!isSelected) {
+                    if (userAnsIdx == correctAnsIdx) {
+                        c.setBackground(new Color(200, 255, 200)); // Light Green
+                        c.setForeground(new Color(0, 100, 0));
+                    } else {
+                        c.setBackground(new Color(255, 200, 200)); // Light Red
+                        c.setForeground(new Color(150, 0, 0));
+                    }
+                }
+                setHorizontalAlignment(JLabel.CENTER);
+                return c;
+            }
+        });
+        
+        // Center the 'Correct Answer' column as well
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
         
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));

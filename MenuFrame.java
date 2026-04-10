@@ -27,8 +27,26 @@ public class MenuFrame extends JFrame {
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         add(welcomeLabel, gbc);
 
+        JLabel bestScoreLabel = new JLabel("Your Best Score: Loading...", SwingConstants.CENTER);
+        bestScoreLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+        bestScoreLabel.setForeground(new Color(0, 102, 204));
+        gbc.gridy = 1;
+        add(bestScoreLabel, gbc);
+
+        // Load best score
+        try {
+            int[] score = FileManager.getUserBestScore(user.getUsername());
+            if (score != null) {
+                bestScoreLabel.setText("Your Best Score: " + score[0] + " / " + score[1]);
+            } else {
+                bestScoreLabel.setText("No attempts yet. Good luck!");
+            }
+        } catch (IOException e) {
+            bestScoreLabel.setText("");
+        }
+
         JLabel catLabel = new JLabel("Select Category:");
-        gbc.gridy = 1; gbc.gridwidth = 1;
+        gbc.gridy = 2; gbc.gridwidth = 1;
         add(catLabel, gbc);
 
         categoryBox = new JComboBox<>();
@@ -50,12 +68,12 @@ public class MenuFrame extends JFrame {
         JButton adminBtn = new JButton("Admin Panel");
         JButton exitBtn = new JButton("Exit");
 
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; add(takeQuizBtn, gbc);
-        gbc.gridy = 3; add(createQuizBtn, gbc);
-        gbc.gridy = 4; add(leaderboardBtn, gbc);
-        gbc.gridy = 5; add(historyBtn, gbc);
-        gbc.gridy = 6; add(adminBtn, gbc);
-        gbc.gridy = 7; add(exitBtn, gbc);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; add(takeQuizBtn, gbc);
+        gbc.gridy = 4; add(createQuizBtn, gbc);
+        gbc.gridy = 5; add(leaderboardBtn, gbc);
+        gbc.gridy = 6; add(historyBtn, gbc);
+        gbc.gridy = 7; add(adminBtn, gbc);
+        gbc.gridy = 8; add(exitBtn, gbc);
 
         takeQuizBtn.addActionListener(e -> startQuiz());
         createQuizBtn.addActionListener(e -> {

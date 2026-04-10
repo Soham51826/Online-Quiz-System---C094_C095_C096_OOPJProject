@@ -79,6 +79,54 @@ public class FileManager {
     }
 
     /**
+     * Returns the best score for a specific user.
+     * @return int array [maxScore, totalAtMax] or null if no attempts
+     */
+    public static int[] getUserBestScore(String username) throws IOException {
+        List<String[]> allScores = loadScores();
+        int maxScore = -1;
+        int totalAtMax = 0;
+        for (String[] s : allScores) {
+            if (s[0].equalsIgnoreCase(username)) {
+                try {
+                    int sc = Integer.parseInt(s[1]);
+                    if (sc > maxScore) {
+                        maxScore = sc;
+                        totalAtMax = Integer.parseInt(s[2]);
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return (maxScore != -1) ? new int[]{maxScore, totalAtMax} : null;
+    }
+
+    /**
+     * Clears all scores for a specific user.
+     */
+    public static void clearUserHistory(String username) throws IOException {
+        List<String[]> allScores = new ArrayList<>();
+        File file = new File(SCORES_FILE);
+        if (!file.exists()) return;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 1 && !parts[0].equalsIgnoreCase(username)) {
+                    allScores.add(parts);
+                }
+            }
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(SCORES_FILE))) {
+            for (String[] s : allScores) {
+                bw.write(String.join("|", s));
+                bw.newLine();
+            }
+        }
+    }
+
+    /**
      * Overwrites the questions file with a given list of questions.
      */
     public static void overwriteQuestions(List<Question> questions) throws IOException {

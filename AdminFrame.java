@@ -1,5 +1,8 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,18 +16,34 @@ public class AdminFrame extends JFrame {
     private JTable questionTable;
     private DefaultTableModel tableModel;
     private List<Question> allQuestions;
+    private JTextField searchField;
+    private TableRowSorter<DefaultTableModel> sorter;
 
     public AdminFrame(User user) {
         this.currentUser = user;
         setTitle("Admin Panel - Manage Questions");
-        setSize(800, 500);
+        setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
+        // Top Panel for Search
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(new JLabel("Search (Category/Question): "));
+        searchField = new JTextField(25);
+        topPanel.add(searchField);
+        add(topPanel, BorderLayout.NORTH);
+
         String[] columnNames = {"Category", "Question", "Option 1", "Option 2", "Option 3", "Option 4", "Correct Index"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
         questionTable = new JTable(tableModel);
+        sorter = new TableRowSorter<>(tableModel);
+        questionTable.setRowSorter(sorter);
+        
         loadTableData();
 
         JScrollPane scrollPane = new JScrollPane(questionTable);
@@ -41,6 +60,28 @@ public class AdminFrame extends JFrame {
         backBtn.addActionListener(e -> {
             new MenuFrame(currentUser).setVisible(true);
             this.dispose();
+        });
+
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filter(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filter(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filter(); }
+
+            private void filter() {
+                String text = searchField.getText();
+                if (text.trim().isEmpty()) {
+                    sorter.setRowFilter(null);
+                } else {
+                    try {
+                        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    } catch (java.util.regex.PatternSyntaxException e) {
+                        // Ignore invalid regex
+                    }
+                }
+            }
         });
     }
 
@@ -72,22 +113,27 @@ public class AdminFrame extends JFrame {
             return;
         }
 
+        // Convert view index to model index (important when filtered/sorted)
+        int modelIndex = questionTable.convertRowIndexToModel(selectedRow);
+
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this question?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            allQuestions.remove(selectedRow);
             try {
-                saveAllQuestions();
-                loadTableData();
-                JOptionPane.showMessageDialog(this, "Question deleted successfully.");
+                // Since modelIndex corresponds to the index in tableModel, 
+                // and tableModel is populated from allQuestions in order,
+                // we can reload and remove at modelIndex.
+                List<Question> currentList = FileManager.loadQuestions();
+                if (modelIndex >= 0 && modelIndex < currentList.size()) {
+                    currentList.remove(modelIndex);
+                    FileManager.overwriteQuestions(currentList);
+                    loadTableData();
+                    JOptionPane.showMessageDialog(this, "Question deleted successfully.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error: Could not find question in list.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error saving questions: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    private void saveAllQuestions() throws IOException {
-        // We need a way to overwrite the file with all questions
-        // I'll add a method to FileManager for this
-        FileManager.overwriteQuestions(allQuestions);
     }
 }
