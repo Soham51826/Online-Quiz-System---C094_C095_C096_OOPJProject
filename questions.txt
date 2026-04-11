@@ -4,3 +4,4 @@ General|What is the largest mammal on Earth?|Blue Whale|Elephant|Giraffe|Hippopo
 General|What is the chemical symbol for gold?|Au|Ag|Fe|Cu|0
 Mathematics|what is 2+2|3|2|4|7|2
 Mathematics|what is 5x5|25|10|50|100|0
+Mathematics|what is 30 / 60|2/3|1/2|0|3|1

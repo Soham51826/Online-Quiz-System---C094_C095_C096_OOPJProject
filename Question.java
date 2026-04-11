@@ -1,4 +1,3 @@
-import java.util.Arrays;
 
 /**
  * Represents a Question in the Quiz System.
