@@ -6,3 +6,4 @@ Mathematics|what is 2+2|3|2|4|7|2
 Mathematics|what is 5x5|25|10|50|100|0
 Mathematics|what is 30 / 60|2/3|1/2|0|3|1
 Chemistry|What is the Symbol of Hydrogen?|H|Hy|He|Ho|0
+Cricket|Most runs in ipl 2016?|Rohit Sharma|Virat Kohli|Ms Dhoni|David Warner|1
