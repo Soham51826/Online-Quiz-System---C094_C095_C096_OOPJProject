@@ -2,8 +2,8 @@ General|What is the capital of France?|Paris|London|Berlin|Madrid|0
 General|Who wrote 'Romeo and Juliet'?|William Shakespeare|Jane Austen|Charles Dickens|Mark Twain|0
 General|What is the largest mammal on Earth?|Blue Whale|Elephant|Giraffe|Hippopotamus|0
 General|What is the chemical symbol for gold?|Au|Ag|Fe|Cu|0
-Mathematics|what is 2+2|3|2|4|7|2
 Mathematics|what is 5x5|25|10|50|100|0
 Mathematics|what is 30 / 60|2/3|1/2|0|3|1
 Chemistry|What is the Symbol of Hydrogen?|H|Hy|He|Ho|0
 Cricket|Most runs in ipl 2016?|Rohit Sharma|Virat Kohli|Ms Dhoni|David Warner|1
+Mathematics|What is the answer of 100/1000|0.1|0.01|0.001|0.0001|0
